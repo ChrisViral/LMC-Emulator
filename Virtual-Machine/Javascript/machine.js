@@ -10,92 +10,92 @@ var MESSAGE_INPUT = "Entrez une valeur numérique entre -500 et 499.";
 
 //Objet regroupant plusieurs fonctions utilitaires
 var Utils =
+{
+    /*
+    * S'assure que lors de l'addition ou de la soustraction, le résultat reste parmis
+    * les nombres compris par la machine virtuelle (-500 à 499)
+    *
+    * param{Number} n: Nombre à vérifier
+    * return{Number}: Résultat restreint de -500 à 499
+    */
+    Clamp: function (n)
     {
-        /*
-         * S'assure que lors de l'addition ou de la soustraction, le résultat reste parmis
-         * les nombres compris par la machine virtuelle (-500 à 499)
-         *
-         * param{Number} n: Nombre à vérifier
-         * return{Number}: Résultat restreint de -500 à 499
-         */
-        Clamp: function(n)
-        {
-            //Au dessus de 499 deviens négatif (499 + 1 = -500)
-            if (n > 499) { return n - 1000; }
-            //Sous -500 deviens positif (-500 - 1 = 499)
-            if (n < -500) { return n + 1000; }
+        //Au dessus de 499 deviens négatif (499 + 1 = -500)
+        if (n > 499) { return n - 1000; }
+        //Sous -500 deviens positif (-500 - 1 = 499)
+        if (n < -500) { return n + 1000; }
 
-            return n;   //Si parmi les bornes, ne pas modifier
-        },
+        return n;   //Si parmi les bornes, ne pas modifier
+    },
 
-        /*
-         * Prends un nombre entre 0 et 999 sans signe et le transforme en un nombre
-         * avec signe entre -500 et 499
-         *
-         * param{Number} n: Nombre à transformer en nombre avec signe
-         * return{Number}: Résultat de la conversion
-         */
-        ToSigned: function(n)
-        {
-            //Tous les nombres au dessus de 499 deviennent négatifs
-            if (n > 499) { return n - 1000; }
+    /*
+    * Prends un nombre entre 0 et 999 sans signe et le transforme en un nombre
+    * avec signe entre -500 et 499
+    *
+    * param{Number} n: Nombre à transformer en nombre avec signe
+    * return{Number}: Résultat de la conversion
+    */
+    ToSigned: function(n)
+    {
+        //Tous les nombres au dessus de 499 deviennent négatifs
+        if (n > 499) { return n - 1000; }
 
-            return n;   //Si sous 500, ne pas modifier
-        },
+        return n;   //Si sous 500, ne pas modifier
+    },
 
-        /*
-         * Transform un nombre signé entre -500 et 499 et le transform en nombre
-         * non signé entre 0 et 999
-         * 
-         * param{Number} n: Nombre à transformer en nombre non signé
-         * return{Number}: Résultat de la conversion
-         */
-        ToUnsigned: function(n)
-        {
-            //Tous les nombres négatifs deviennent plus grand que 499
-            if (n < 0) { return n + 1000; }
+    /*
+    * Transform un nombre signé entre -500 et 499 et le transform en nombre
+    * non signé entre 0 et 999
+    * 
+    * param{Number} n: Nombre à transformer en nombre non signé
+    * return{Number}: Résultat de la conversion
+    */
+    ToUnsigned: function(n)
+    {
+        //Tous les nombres négatifs deviennent plus grand que 499
+        if (n < 0) { return n + 1000; }
 
-            return n;   //Sinon, ne pas modifier
-        },
+        return n;   //Sinon, ne pas modifier
+    },
 
-        /*
-         * Vérifie si une suite de charactères est une étiquette (finie par ':')
-         *
-         * param{String} s: Chaine de charactère à vérifier
-         * return{Bool}: Si la chaine de charactère finie par ':' ou non
-         */
-        IsLabel: function(s)
-        {
-            return s[s.length - 1] === ':';
-        },
+    /*
+    * Vérifie si une suite de charactères est une étiquette (finie par ':')
+    *
+    * param{String} s: Chaine de charactère à vérifier
+    * return{Bool}: Si la chaine de charactère finie par ':' ou non
+    */
+    IsLabel: function(s)
+    {
+        return s[s.length - 1] === ':';
+    },
 
-        /*
-         * Enlève le dernier charactère d'un string et retourne le résultat
-         *
-         * param{String} s: Chaine de charachtère à modifier
-         * return{String}: Chaine de charactère sans son dernier charactère
-         */
-        GetLabel: function(s)
-        {
-            return s.substring(0, s.length - 1);
-        }
-    };
+    /*
+    * Enlève le dernier charactère d'un string et retourne le résultat
+    *
+    * param{String} s: Chaine de charachtère à modifier
+    * return{String}: Chaine de charactère sans son dernier charactère
+    */
+    GetLabel: function(s)
+    {
+        return s.substring(0, s.length - 1);
+    }
+};
 
 //Objet regroupant toutes les commands possibles de la machine LMC
 var instructions =
-    {
-        "ADD": 100,     //Addition              1XX
-        "SUB": 200,     //Soustraction          2XX
-        "STA": 300,     //Sauvegarde            3XX
-        "LDA": 500,     //Chargement            5XX
-        "BRA": 600,     //Banche                6XX
-        "BRZ": 700,     //Branche si zéro       7XX
-        "BRP": 800,     //Branche si positif    8XX
-        "INP": 901,     //Entrée                901
-        "OUT": 902,     //Sortie                902
-        "HLT": 0,       //Fin                   000
-        "DAT": 0        //Data                  XXX
-    };
+{
+    "ADD": 100,     //Addition              1XX
+    "SUB": 200,     //Soustraction          2XX
+    "STA": 300,     //Sauvegarde            3XX
+    "LDA": 500,     //Chargement            5XX
+    "BRA": 600,     //Banche                6XX
+    "BRZ": 700,     //Branche si zéro       7XX
+    "BRP": 800,     //Branche si positif    8XX
+    "INP": 901,     //Entrée                901
+    "OUT": 902,     //Sortie                902
+    "HLT": 0,       //Fin                   000
+    "DAT": 0        //Data                  XXX
+};
 
 
 /*
