@@ -143,10 +143,10 @@ namespace LMC_Virtual_Machine
                 if (Label.IsLabel(label))
                 {
                     labels.Add(new Label(label, i));
-                    string[] removed = new string[line.Length];
+                    string[] removed = new string[line.Length - 1];
                     for (int j = 1; j < line.Length; j++)
                     {
-                        removed[j] = line[j];
+                        removed[j - 1] = line[j];
                     }
                     code.Add(removed);
                 }
@@ -183,8 +183,8 @@ namespace LMC_Virtual_Machine
 
                 Instruction instruction;
                 if (!charCodes.TryGetValue(line[0], out instruction)) { return false; }
-                UNum address = 0;
-                if (line.Length == 2 && !UNum.TryParse(line[1], ref address)) { return false; }
+                int address = 0;
+                if (line.Length == 2 && !int.TryParse(line[1], out address) && address >= 0 && address <= 99) { return false; }
                 temp[i] = (int)instruction + address;
             }
             instructions = temp;

@@ -26,7 +26,7 @@ namespace LMC_Virtual_Machine
             /// </summary>
             public UNum current
             {
-                get { return this.mem[this.pc]; }
+                get { return this.mem[(int)this.pc]; }
             }
             #endregion
 
@@ -88,9 +88,9 @@ namespace LMC_Virtual_Machine
         {
             //Identifies which instruction to execute
             Instruction instruction;
-            UNum index = c % 100;
+            int index = (int)c % 100;
             if (c == 901 || c == 902) { instruction = (Instruction)c; }
-            else { instruction = (Instruction)((c - index) / 100); }
+            else { instruction = (Instruction)(c - index); }
 
             //Executes current instruction
             switch (instruction)
@@ -98,14 +98,14 @@ namespace LMC_Virtual_Machine
                 //Addition
                 case Instruction.ADD:
                     {
-                        state.acc = state.acc + state.mem[index];
+                        state.acc += state.mem[index];
                         break;
                     }
 
                 // Substraction
                 case Instruction.SUB:
                     {
-                        state.acc = state.acc - state.mem[index];
+                        state.acc -= state.mem[index];
                         break;
                     }
 

@@ -31,13 +31,21 @@ namespace LMC_Virtual_Machine
                 Console.WriteLine("Is this program correct? Y/N");
 
                 //Check for Y and N key presses
+                bool cont = true;
                 while (true)
                 {
                     ConsoleKey key = Console.ReadKey().Key;
-                    if (key == ConsoleKey.Y) { Console.WriteLine(); break; }
-                    if (key == ConsoleKey.N) { Console.Clear(); break; }
+                    if (key == ConsoleKey.Y) { Console.WriteLine("\n"); break; }
+                    if (key == ConsoleKey.N)
+                    {
+                        Console.Clear();
+                        code = new List<string>();
+                        cont = false;
+                        break;
+                    }
                     Console.Write("\b \b");
                 }
+                if (!cont) { continue; }
 
                 //Verify if code is valid
                 machine = new Machine(code);
@@ -46,6 +54,7 @@ namespace LMC_Virtual_Machine
                     Console.WriteLine("Code is invalid, please reenter a valid LMC command code. Press nter to restart.");
                     Console.ReadLine();
                     Console.Clear();
+                    code = new List<string>();
                 }
                 else
                 {

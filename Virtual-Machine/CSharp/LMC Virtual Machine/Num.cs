@@ -31,19 +31,6 @@
 
             this.value = value;
         }
-
-        /// <summary>
-        /// Creates the signed equivalent of a given unsigned number
-        /// </summary>
-        /// <param name="value">Unsigned value</param>
-        private Num(UNum value)
-        {
-            if (value > 499)
-            {
-                value -= 1000;
-            }
-            this.value = value;
-        }
         #endregion
 
         #region Operators
@@ -60,7 +47,7 @@
         /// </summary>
         public static explicit operator Num(UNum value)
         {
-            return new Num(value);
+            return new Num((short)value);
         }
 
         /// <summary>
@@ -72,9 +59,9 @@
         }
 
         /// <summary>
-        /// Implicit Num to short cast
+        /// Explicit Num to short cast
         /// </summary>
-        public static implicit operator short(Num value)
+        public static explicit operator short(Num value)
         {
             return value.value;
         }
@@ -93,6 +80,22 @@
         public static Num operator -(Num n1, Num n2)
         {
             return Clamp(n1.value - n2.value);
+        }
+
+        /// <summary>
+        /// Signed/int addition
+        /// </summary>
+        public static Num operator +(Num n1, int n2)
+        {
+            return n1.value + n2;
+        }
+
+        /// <summary>
+        /// Signed/int substraction
+        /// </summary>
+        public static Num operator -(Num n1, int n2)
+        {
+            return n1.value - n2;
         }
         #endregion
 
@@ -113,11 +116,11 @@
         /// <param name="n">Value to clamp</param>
         private static Num Clamp(Num n)
         {
-            if (n > maxValue)
+            if (n.value > maxValue)
             {
                 return n - 1000;
             }
-            if (n < -minValue)
+            if (n.value < minValue)
             {
                 return n + 1000;
             }
@@ -170,20 +173,6 @@
 
             this.value = value;
         }
-
-        /// <summary>
-        /// Creates the unsigned equivalent of a given signed number
-        /// </summary>
-        /// <param name="value">Signed value</param>
-        private UNum(Num value)
-        {
-            if (value < 0)
-            {
-                value += 1000;
-            }
-
-            this.value = value;
-        }
         #endregion
 
         #region Operators
@@ -200,7 +189,7 @@
         /// </summary>
         public static explicit operator UNum(Num value)
         {
-            return new UNum((int)value);
+            return new UNum((short)value);
         }
         
         /// <summary>
@@ -220,9 +209,9 @@
         }
 
         /// <summary>
-        /// Implicit UNum to short cast
+        /// Explicit UNum to short cast
         /// </summary>
-        public static implicit operator short(UNum value)
+        public static explicit operator short(UNum value)
         {
             return value.value;
         }
@@ -244,19 +233,27 @@
         }
 
         /// <summary>
-        /// Value division
+        /// Unsigned/int addition
         /// </summary>
-        public static UNum operator /(UNum n1, UNum n2)
+        public static UNum operator +(UNum n1, int n2)
         {
-            return n1.value / n2.value;
+            return n1.value + n2;
         }
 
         /// <summary>
-        /// Value modulo
+        /// Unsigned/int substraction
         /// </summary>
-        public static UNum operator %(UNum n1, UNum n2)
+        public static UNum operator -(UNum n1, int n2)
         {
-            return n1.value % n2.value;
+            return n1.value - n2;
+        }
+
+        /// <summary>
+        /// Unsigned incrementation
+        /// </summary>
+        public static UNum operator ++(UNum n)
+        {
+            return n.value + 1;
         }
 
         /// <summary>
