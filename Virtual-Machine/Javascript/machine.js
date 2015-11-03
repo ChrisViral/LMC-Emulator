@@ -12,13 +12,14 @@ var MESSAGE_INPUT = "Entrez une valeur numérique entre -500 et 499.";
 var Utils =
 {
     /*
-    * S'assure que lors de l'addition ou de la soustraction, le résultat reste parmis
-    * les nombres compris par la machine virtuelle (-500 à 499)
-    *
-    * param{Number} n: Nombre à vérifier
-    * return{Number}: Résultat restreint de -500 à 499
-    */
-    Clamp: function (n) {
+     * S'assure que lors de l'addition ou de la soustraction, le résultat reste parmis
+     * les nombres compris par la machine virtuelle (-500 à 499)
+     *
+     * param{Number} n: Nombre à vérifier
+     * return{Number}: Résultat restreint de -500 à 499
+     */
+    Clamp: function (n)
+    {
         //Au dessus de 499 deviens négatif (499 + 1 = -500)
         if (n > 499) { return n - 1000; }
         //Sous -500 deviens positif (-500 - 1 = 499)
@@ -28,13 +29,14 @@ var Utils =
     },
 
     /*
-    * Prends un nombre entre 0 et 999 sans signe et le transforme en un nombre
-    * avec signe entre -500 et 499
-    *
-    * param{Number} n: Nombre à transformer en nombre avec signe
-    * return{Number}: Résultat de la conversion
-    */
-    ToSigned: function (n) {
+     * Prends un nombre entre 0 et 999 sans signe et le transforme en un nombre
+     * avec signe entre -500 et 499
+     *
+     * param{Number} n: Nombre à transformer en nombre avec signe
+     * return{Number}: Résultat de la conversion
+     */
+    ToSigned: function (n)
+    {
         //Tous les nombres au dessus de 499 deviennent négatifs
         if (n > 499) { return n - 1000; }
 
@@ -42,13 +44,14 @@ var Utils =
     },
 
     /*
-    * Transform un nombre signé entre -500 et 499 et le transform en nombre
-    * non signé entre 0 et 999
-    * 
-    * param{Number} n: Nombre à transformer en nombre non signé
-    * return{Number}: Résultat de la conversion
-    */
-    ToUnsigned: function (n) {
+     * Transform un nombre signé entre -500 et 499 et le transform en nombre
+     * non signé entre 0 et 999
+     * 
+     * param{Number} n: Nombre à transformer en nombre non signé
+     * return{Number}: Résultat de la conversion
+     */
+    ToUnsigned: function (n)
+    {
         //Tous les nombres négatifs deviennent plus grand que 499
         if (n < 0) { return n + 1000; }
 
@@ -56,22 +59,24 @@ var Utils =
     },
 
     /*
-    * Vérifie si une suite de charactères est une étiquette (finie par ':')
-    *
-    * param{String} s: Chaine de charactère à vérifier
-    * return{Bool}: Si la chaine de charactère finie par ':' ou non
-    */
-    IsLabel: function (s) {
+     * Vérifie si une suite de charactères est une étiquette (finie par ':')
+     *
+     * param{String} s: Chaine de charactère à vérifier
+     * return{Bool}: Si la chaine de charactère finie par ':' ou non
+     */
+    IsLabel: function (s) 
+    {
         return s[s.length - 1] === ':';
     },
 
     /*
-    * Enlève le dernier charactère d'un string et retourne le résultat
-    *
-    * param{String} s: Chaine de charachtère à modifier
-    * return{String}: Chaine de charactère sans son dernier charactère
-    */
-    GetLabel: function (s) {
+     * Enlève le dernier charactère d'un string et retourne le résultat
+     *
+     * param{String} s: Chaine de charachtère à modifier
+     * return{String}: Chaine de charactère sans son dernier charactère
+     */
+    GetLabel: function (s)
+    {
         return s.substring(0, s.length - 1);
     }
 };
@@ -101,7 +106,8 @@ var instructions =
  * param{Number} acc: L'accumulateur
  * return{LMCState}: Un enregistrement représentant l'état d'une machine LMC.
  */
-function LMCState(mem, pc, acc) {
+function LMCState(mem, pc, acc)
+{
     return { mem: mem, pc: pc, acc: acc };
 }
 
@@ -117,7 +123,8 @@ function LMCState(mem, pc, acc) {
  * param{String} source: Le code source
  * return{Number[]}: Une série d'instructions prêtes à être exécutées.
  */
-function compile(source) {
+function compile(source)
+{
     var lines = SplitLines(source);     //Sépare les lignes
     var delabeled = Delabel(lines);     //Désétiquette le code
     var code = Generate(delabeled);     //Génère les instructions
@@ -130,11 +137,13 @@ function compile(source) {
  * param{Number[]} mem: La mémoire 
  * return{LMCState}: Un enregistrement représentant l'état final de la machine.
  */
-function execute(mem) {
+function execute(mem)
+{
     var state = LMCState(mem, 0, 0);    //Initialise l'état de la machine LMC
 
     //Continue temps que le pointeur n'est pas à la fin de la mémoire
-    while (state.pc < state.mem.length) {
+    while (state.pc < state.mem.length)
+    {
         var c = state.mem[state.pc];    //Instruction courrante
 
         /*
@@ -160,12 +169,14 @@ function execute(mem) {
  * param{String} source: Le code source
  * return{String[][]}: Le tableaux des lignes étant des tableaux de chaque instruction
  */
-function SplitLines(source) {
-    var lines = source.toUpperCase().split("\n");     //Mets le code en majuscules et sépare les lignes au charactère de saut de ligne
-    var result = [];                                //Initialise le tableau résultat
+function SplitLines(source)
+{
+    var lines = source.toUpperCase().split("\n");       //Mets le code en majuscules et sépare les lignes au charactère de saut de ligne
+    var result = [];                                    //Initialise le tableau résultat
 
     //Boucle à travers toutes les lignes
-    for (var i = 0; i < lines.length; i++) {
+    for (var i = 0; i < lines.length; i++)
+    {
         var c = SplitInstructions(lines[i]);    //Sépare les lignes en instructions
 
         //Si la ligne n'est pas vide, ajoute le tableau aux résultats
@@ -182,12 +193,13 @@ function SplitLines(source) {
  * param{String} line: La ligne de code à séparer
  * return{String[]}: La ligne séparée en instructions
  */
-function SplitInstructions(line) {
+function SplitInstructions(line)
+{
     //Si la ligne est vide, retourner null
     if (line == "") { return null; }
 
     //Sépare chaque mot aux espaces
-    return line.split(" ");
+    return line.split(' ');
 }
 
 /*
@@ -197,31 +209,37 @@ function SplitInstructions(line) {
  * param{String[][]} lines: Code séparé en lignes et en instructions
  * return{string[][]}: Code désétiquetté et séparé
  */
-function Delabel(lines) {
+function Delabel(lines)
+{
     var labels = {};    //Initialisation de l'enregistrement d'étiquettes
 
     //Boucle à travers toutes les lignes
-    for (var i = 0; i < lines.length; i++) {
+    for (var i = 0; i < lines.length; i++)
+    {
         var line = lines[i];    //Ligne courrante
         var label = line[0];    //Premier élément de la ligne
 
         //Vérifie si le premier élément de la ligne est une étiquette
-        if (Utils.IsLabel(label)) {
+        if (Utils.IsLabel(label))
+        {
             labels[Utils.GetLabel(label)] = i;      //Ajoute l'étiquette à l'enregistrement
             lines[i] = line.slice(1);               //Enlève l'étiquette de la ligne et la remplace dans le tableau
         }
     }
 
     //Boucle à travers toutes les lignes
-    for (var i = 0; i < lines.length; i++) {
+    for (var i = 0; i < lines.length; i++)
+    {
         var line = lines[i];    //Ligne courrante
 
         //Vérifie que la ligne à deux éléments (instructions + nombre/étiquette)
-        if (line.length == 2) {
+        if (line.length == 2)
+        {
             var label = line[1];    //Deuxième élément de la ligne
 
             //Vérifie que le deuxième élément n'est pas un chiffre
-            if (isNaN(parseInt(label))) {
+            if (isNaN(parseInt(label)))
+            {
                 line[1] = labels[label].toString();     //Remplace l'étiquette par le chiffre correspondant
             }
         }
@@ -237,11 +255,13 @@ function Delabel(lines) {
  * param{String[][]} delabeled: Le code séparé et désétiquetté
  * return{Number[]}: Les instructions mémoire pouvant être exécutées
  */
-function Generate(delabeled) {
+function Generate(delabeled)
+{
     var code = [];      //Initialise le tableau résultat
 
     //Boucle à travers toutes les lignes
-    for (var i = 0; i < delabeled.length; i++) {
+    for (var i = 0; i < delabeled.length; i++)
+    {
         var line = delabeled[i];    //Ligne courrante
         var index = 0;              //Initialise l'index de ligne
 
@@ -263,12 +283,14 @@ function Generate(delabeled) {
  * parame{LMCState} state: État actuel de la machine LMC
  * return{LMCState}: L'état de la machine après l'éxécution de l'instruction
  */
-function ExecuteInstruction(c, state) {
+function ExecuteInstruction(c, state)
+{
     var index = c % 100;                    //Obtiens l'index de position
     var instruction = (c - index) / 100;    //Obtiens le numéro d'instruction
 
     //Décide de l'instruction à éxécuter
-    switch (instruction) {
+    switch (instruction)
+    {
         //ADD - 1XX
         case 1:
             {
@@ -334,12 +356,14 @@ function ExecuteInstruction(c, state) {
         case 9:
             {
                 //INP - 901
-                if (index == 1) {
+                if (index == 1)
+                {
                     //Obtiens un nombre entre -500 et 499 pars prompt
                     var n = parseInt(prompt(MESSAGE_INPUT, ""));
 
                     //Vérifie si le nombre est valide
-                    while (n < -500 || n > 499 || isNaN(n)) {
+                    while (n < -500 || n > 499 || isNaN(n))
+                    {
                         //Sinon, demande un nombre valide à nouveau, jusqu'a ce qu'il valide
                         n = parseInt(prompt("Nombre invalide. " + MESSAGE_INPUT, ""));
                     }
@@ -349,7 +373,8 @@ function ExecuteInstruction(c, state) {
                 }
 
                 //OUT - 902
-                if (index == 2) {
+                if (index == 2)
+                {
                     //Imprime le nombre dans l'accumulateur sous forme signée
                     print("Sortie: " + Utils.ToSigned(state.acc));
                     break;
