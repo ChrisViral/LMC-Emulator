@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace LMC_Virtual_Machine
 {
@@ -52,6 +53,7 @@ namespace LMC_Virtual_Machine
             #endregion
         }
 
+        #region Static fields
         //Quick string->Instruction parsing dictionary
         private static readonly Dictionary<string, Instruction> charCodes = new Dictionary<string, Instruction>(11)
         #region Values
@@ -68,6 +70,10 @@ namespace LMC_Virtual_Machine
             { "HLT", Instruction.HLT },
             { "DAT", Instruction.DAT },
         };
+        #endregion
+
+        //Line word separator
+        private static readonly char[] separator = { ' ' };
         #endregion
 
         #region Fields
@@ -123,7 +129,7 @@ namespace LMC_Virtual_Machine
         private List<string[]> SplitLines(List<string> lines)
         {
             List<string[]> code = new List<string[]>();
-            lines.ForEach(l => code.Add(l.ToUpper().Split(' ')));
+            lines.ForEach(l => code.Add(l.ToUpper().Split(separator, StringSplitOptions.RemoveEmptyEntries)));
             return code;
         }
 
